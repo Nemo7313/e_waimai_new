@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--只接受程序中DEBUG级别的日志进行处理-->
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{HH:mm:ss.SSS}] %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+        <RollingFile name="file" fileName="./logs/log.txt" filePattern="logs/log-%d{yyyy-MM-dd}-%i.txt">
+            <Filters>
+                <ThresholdFilter level="DEBUG"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="errfile" fileName="./logs/err.txt" filePattern="logs/err-%d{yyyy-MM-dd}-%i.txt">
+            <Filters>
+                <ThresholdFilter level="ERROR"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+        </appenders>
+    <!--     然后定义logger，只有定义了logger并引入的appender，appender才会生效 -->
+    <loggers>
+        <!--默认的root的logger-->
+        <root level="DEBUG">
+            <appender-ref ref="Console"/>
+        </root>
+        <!--额外配置的logger-->
+        <logger level="DEBUG" name="APP">
+            <appender-ref ref="file"/>
+        </logger>
+        <logger level="ERROR" name="ERR">
+            <appender-ref ref="errfile"/>
+        </logger>
+    </loggers>
+</configuration>
