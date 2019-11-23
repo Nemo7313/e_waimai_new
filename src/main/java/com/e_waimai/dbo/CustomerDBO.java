@@ -28,4 +28,41 @@ public class CustomerDBO extends BaseDBO {
         }
         return info;
     }
+    public boolean register(String tel, String name, String addr){
+        if(getConnection()){
+            String sql = "INSERT INTO customer(tel, name, addr) VALUES(?,?,?)";
+            try {
+                psmt = connection.prepareStatement(sql);
+                psmt.setString(1,tel);
+                psmt.setString(2,name);
+                psmt.setString(3,addr);
+                update  = psmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if(update == 1){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public long getIdByPhone(String phone){
+        long customerID = -1;
+        if(getConnection()){
+            String sql = "select id from customer where tel = ?";
+            try {
+                psmt = connection.prepareStatement(sql);
+                psmt.setString(1,phone);
+                rs = psmt.executeQuery();
+                while(rs.next()){
+                    customerID = rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return customerID;
+    }
 }
