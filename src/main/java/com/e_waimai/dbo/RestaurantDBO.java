@@ -90,4 +90,31 @@ public class RestaurantDBO extends BaseDBO {
             return false;
         }
     }
+
+    public String getRestaurantList(){
+        StringBuilder stringBuilder = new StringBuilder();
+        if(getConnection()){
+            String sql = "select id,name,notes from restaurant";
+            try {
+                psmt = connection.prepareStatement(sql);
+                rs = psmt.executeQuery();
+                while(rs.next()){
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    String notes = rs.getString("notes");
+                    logger.debug("id是--"+id+"姓名是---"+name+"简介是----"+notes);
+                    stringBuilder.append(id);
+                    stringBuilder.append("\t");
+                    stringBuilder.append(name);
+                    stringBuilder.append("\t");
+                    stringBuilder.append(notes);
+                    stringBuilder.append("\n");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        logger.debug("已完成客户请求的餐馆列表");
+        return stringBuilder.toString();
+    }
 }

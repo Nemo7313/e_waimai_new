@@ -18,7 +18,8 @@ public interface IMessage {
 
     int REQ_LOGIN_CS = 3000;//顾客端登录
     int CS_REG = 3010;//顾客注册
-    int CS_ORDER_FOOD = 3020; //顾客点餐
+    int CS_ORDER_FOOD = 3020; //顾客开始点餐
+    int Res_List = 3021;
 
     int getMsgType();
 }

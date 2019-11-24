@@ -14,6 +14,7 @@ public class Customer extends ANetClient {
     private String phone;
     private long id;
     private CustomerDBO cdbo = new CustomerDBO();
+    private Platform platform  = new Platform();
 
     public Customer(Socket socket, String phone) {
         super(socket);
@@ -85,6 +86,9 @@ public class Customer extends ANetClient {
                     break;
                 case IMessage.CS_ORDER_FOOD:
                     logger.debug("服务器收到顾客的点餐消息");
+                    String RestList = platform.restaurantDBO.getRestaurantList();
+                    send(new TextMsg(RestList));
+                    logger.debug("服务器已发送餐馆列表信息！");
                     break;
                 default:
                     break;

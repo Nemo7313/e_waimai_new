@@ -60,6 +60,10 @@ public class CustomerClient {
                     switch (t2) {
                         case ORDER:
                             logger.debug("可以开始点餐了o(*￣▽￣*)ブ");
+                            customer.send(new CusOrderFoodMsg());
+                            System.out.println("请选择以下餐厅的编号");
+                            int ResNo = sc.nextInt();
+                            String enter3 = sc.nextLine();
                             logger.debug("点餐信息信息已发送");
                             break;
                         case SELECTORDER:
