@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public interface IMessage {
     int TEXT_MSG = 0; //普通文字消息
+    int BOOLEAN_MSG = 10; //标定状态消息
     int REQ_VCODE = 1000;//请求注册或登录验证码,仅限商家
     int REQ_VCODE_CUS = 1100;//请求注册或登录验证码,仅限顾客
 
