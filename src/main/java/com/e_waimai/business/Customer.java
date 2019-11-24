@@ -78,6 +78,7 @@ public class Customer extends ANetClient {
                         boolean login = true;
                         IsLoginMsg isLoginMsg = new IsLoginMsg(login);
                         send(isLoginMsg);
+                        send(new TextMsg("您已注册成功，输入666刷新菜单，可以进行点餐啦！"));
                     }else{
                         send(new TextMsg("注册失败，请重新尝试"));
                     }
