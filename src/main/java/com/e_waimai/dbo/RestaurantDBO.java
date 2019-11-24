@@ -3,6 +3,7 @@ package com.e_waimai.dbo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 
 public class RestaurantDBO extends BaseDBO {
@@ -116,5 +117,35 @@ public class RestaurantDBO extends BaseDBO {
         }
         logger.debug("已完成客户请求的餐馆列表");
         return stringBuilder.toString();
+    }
+
+    public String getFoodList(int ResId){
+        StringBuilder stringBuilder2 = new StringBuilder();
+        if(getConnection()){
+            String sql = "select id,name,price,intro from food where restaurant_id = ?";
+            try {
+                psmt = connection.prepareStatement(sql);
+                psmt.setInt(1,ResId);
+                rs = psmt.executeQuery();
+                while(rs.next()){
+                    long id = rs.getLong("id");
+                    String name = rs.getString("name");
+                    BigDecimal price = rs.getBigDecimal("price");
+                    String notes = rs.getString("intro");
+                    stringBuilder2.append(id);
+                    stringBuilder2.append("\t");
+                    stringBuilder2.append(name);
+                    stringBuilder2.append("\t");
+                    stringBuilder2.append(price);
+                    stringBuilder2.append("\t");
+                    stringBuilder2.append(notes);
+                    stringBuilder2.append("\n");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        logger.debug("已完成客户请求的菜单列表");
+        return stringBuilder2.toString();
     }
 }

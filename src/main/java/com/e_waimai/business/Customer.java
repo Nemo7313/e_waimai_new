@@ -90,6 +90,13 @@ public class Customer extends ANetClient {
                     send(new TextMsg(RestList));
                     logger.debug("服务器已发送餐馆列表信息！");
                     break;
+                case IMessage.Food_List:
+                    logger.debug("开始展示菜单");
+                    FoodListMsg foodListMsg = (FoodListMsg)event;
+                    int ResNum = foodListMsg.getRestaurantNumber();
+                    String FoodList = platform.restaurantDBO.getFoodList(ResNum);
+                    send(new TextMsg(FoodList));
+                    logger.debug("已向服务端发送菜单信息");
                 default:
                     break;
             }

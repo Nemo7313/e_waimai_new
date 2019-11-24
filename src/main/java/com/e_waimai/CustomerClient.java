@@ -65,6 +65,14 @@ public class CustomerClient {
                             int ResNo = sc.nextInt();
                             String enter3 = sc.nextLine();
                             logger.debug("点餐信息信息已发送");
+                            customer.send(new FoodListMsg(ResNo));
+                            System.out.println("请选择以下菜品，输入0结束");
+                            while(true){
+                                String food = sc.nextLine();
+                                if(Integer.parseInt(food)==0){
+                                    break;
+                                }
+                            }
                             break;
                         case SELECTORDER:
                             break;
