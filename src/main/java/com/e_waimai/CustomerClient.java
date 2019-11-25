@@ -6,6 +6,8 @@ import com.e_waimai.net.message.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CustomerClient {
@@ -21,6 +23,7 @@ public class CustomerClient {
     private static boolean loop = true;
     private static boolean loop2 = true;
     private static boolean isFlag = false; // 判断用户是否有权限进行点餐
+    private static Map<Long,Integer> bills = new HashMap<>();
 
     public static void main(String[] args) {
         logger.debug("顾客客户端准备启动");
@@ -69,10 +72,22 @@ public class CustomerClient {
                             System.out.println("请选择以下菜品，输入0结束");
                             while(true){
                                 String food = sc.nextLine();
-                                if(Integer.parseInt(food)==0){
+                                long foodId = Long.parseLong(food);
+                                if(foodId==0){
                                     break;
                                 }
+                                if(bills.containsKey(foodId)){
+                                    Integer mount = bills.get(foodId);
+                                    mount = mount+1;
+                                    bills.put(foodId, mount++);
+                                }else {
+                                    bills.put(foodId, 1);
+                                }
+
                             }
+                            System.out.println("OK,您已点餐完毕，正在帮您计算价格");
+                            customer.send(new AddPriceMsg(bills));
+                            String choose = sc.nextLine();
                             break;
                         case SELECTORDER:
                             break;

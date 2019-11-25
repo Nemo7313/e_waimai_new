@@ -7,14 +7,20 @@ import com.e_waimai.net.message.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Customer extends ANetClient {
     protected static Logger logger = LogManager.getLogger("APP");
     private String phone;
-    private long id;
+    private long id; // 顾客自己的Id
     private CustomerDBO cdbo = new CustomerDBO();
     private Platform platform  = new Platform();
+
+    private int newOrderResurantId; //点餐传递过来的餐馆Id
+    private  Map<Long,Integer> newOrderBills = new HashMap<>();
 
     public Customer(Socket socket, String phone) {
         super(socket);
@@ -93,10 +99,24 @@ public class Customer extends ANetClient {
                 case IMessage.Food_List:
                     logger.debug("开始展示菜单");
                     FoodListMsg foodListMsg = (FoodListMsg)event;
-                    int ResNum = foodListMsg.getRestaurantNumber();
-                    String FoodList = platform.restaurantDBO.getFoodList(ResNum);
+                    newOrderResurantId = foodListMsg.getRestaurantNumber();
+                    String FoodList = platform.restaurantDBO.getFoodList(newOrderResurantId);
                     send(new TextMsg(FoodList));
                     logger.debug("已向服务端发送菜单信息");
+                    break;
+                case IMessage.ADD_PRICE:
+                    logger.debug("服务器收到计算菜品总价的信息！");
+                    AddPriceMsg addPriceMsg = (AddPriceMsg)event;
+                    newOrderBills = addPriceMsg.getBills();
+                    double totalCost = 0.0;
+                    for(long fooId: newOrderBills.keySet()){
+                        double price = platform.restaurantDBO.getFoodPrice(fooId);
+                        totalCost += price * newOrderBills.get(fooId);
+                    }
+                    String billsCost = "您点的菜品总消费额为"+totalCost+"元，另需要支付配送费3元，" +
+                            "支付请输入 yes， 不支付请选择 no";
+                    send(new TextMsg(billsCost));
+                    break;
                 default:
                     break;
             }

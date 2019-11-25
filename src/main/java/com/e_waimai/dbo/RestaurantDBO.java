@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class RestaurantDBO extends BaseDBO {
     protected static Logger logger = LogManager.getLogger("APP");
@@ -147,5 +148,24 @@ public class RestaurantDBO extends BaseDBO {
         }
         logger.debug("已完成客户请求的菜单列表");
         return stringBuilder2.toString();
+    }
+
+    public double getFoodPrice(long foodId){
+        double price = 0.0;
+        if(getConnection()){
+            String sql = "select price from food where id = ?";
+            try {
+                psmt = connection.prepareStatement(sql);
+                psmt.setLong(1,foodId);
+                rs = psmt.executeQuery();
+                while(rs.next()){
+                    price = rs.getDouble("price");
+                    logger.debug("此菜品的价格为"+price +"元");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return price;
     }
 }

@@ -20,6 +20,7 @@ public interface IMessage {
     int CS_REG = 3010;//顾客注册
     int CS_ORDER_FOOD = 3020; //顾客开始点餐
     int Food_List = 3021;
+    int ADD_PRICE = 3022;
 
     int getMsgType();
 }
