@@ -21,6 +21,7 @@ public interface IMessage {
     int CS_ORDER_FOOD = 3020; //顾客开始点餐
     int Food_List = 3021;
     int ADD_PRICE = 3022;
+    int CREATE_NEW_ORDER = 3033;
 
     int getMsgType();
 }

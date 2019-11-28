@@ -19,8 +19,10 @@ public class Customer extends ANetClient {
     private CustomerDBO cdbo = new CustomerDBO();
     private Platform platform  = new Platform();
 
-    private int newOrderResurantId; //点餐传递过来的餐馆Id
+    private int newOrderRestaurantId; //点餐传递过来的餐馆Id
     private  Map<Long,Integer> newOrderBills = new HashMap<>();
+    private double newOrderDeliCost = 0.0;
+    private double newOrderTotalCost = 0.0;
 
     public Customer(Socket socket, String phone) {
         super(socket);
@@ -99,8 +101,8 @@ public class Customer extends ANetClient {
                 case IMessage.Food_List:
                     logger.debug("开始展示菜单");
                     FoodListMsg foodListMsg = (FoodListMsg)event;
-                    newOrderResurantId = foodListMsg.getRestaurantNumber();
-                    String FoodList = platform.restaurantDBO.getFoodList(newOrderResurantId);
+                    newOrderRestaurantId = foodListMsg.getRestaurantNumber();
+                    String FoodList = platform.restaurantDBO.getFoodList(newOrderRestaurantId);
                     send(new TextMsg(FoodList));
                     logger.debug("已向服务端发送菜单信息");
                     break;
@@ -116,6 +118,19 @@ public class Customer extends ANetClient {
                     String billsCost = "您点的菜品总消费额为"+totalCost+"元，另需要支付配送费3元，" +
                             "支付请输入 yes， 不支付请选择 no";
                     send(new TextMsg(billsCost));
+                    newOrderDeliCost = totalCost;
+                    newOrderTotalCost = totalCost + 3.0;
+                    break;
+                case IMessage.CREATE_NEW_ORDER:
+                    logger.debug("开始准备下单.....");
+                    boolean add = platform.platformDBO.createNewOrderAndGetId(id, newOrderRestaurantId, newOrderDeliCost,
+                            newOrderTotalCost, newOrderBills);
+                    logger.debug("菜品总价为："+newOrderDeliCost+",加上配送费之后的总价为："+newOrderTotalCost);
+                    if(add){
+                        send(new TextMsg("您已下单成功，等待配送"));
+                    }else{
+                        send(new TextMsg("您下单失败，请重新下单"));
+                    }
                     break;
                 default:
                     break;

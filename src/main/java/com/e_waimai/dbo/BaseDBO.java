@@ -10,6 +10,7 @@ public class BaseDBO {
     static Connection connection = null;
     static PreparedStatement psmt = null;
     static ResultSet rs;
+
     public boolean getConnection(){
         String driver = ConfigManager.getInstance().getKey("jdbc.driver_class");
         String url = ConfigManager.getInstance().getKey("jdbc.connection.url");

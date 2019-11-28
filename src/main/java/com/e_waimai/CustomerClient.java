@@ -88,6 +88,11 @@ public class CustomerClient {
                             System.out.println("OK,您已点餐完毕，正在帮您计算价格");
                             customer.send(new AddPriceMsg(bills));
                             String choose = sc.nextLine();
+                            if(choose.equalsIgnoreCase("yes")){
+                                customer.send(new CreateNewOrderMsg());
+                            }else {
+                                System.out.println("请重新选择点餐功能");
+                            }
                             break;
                         case SELECTORDER:
                             break;

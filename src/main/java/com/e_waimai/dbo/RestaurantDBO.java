@@ -104,7 +104,6 @@ public class RestaurantDBO extends BaseDBO {
                     int id = rs.getInt("id");
                     String name = rs.getString("name");
                     String notes = rs.getString("notes");
-                    logger.debug("id是--"+id+"姓名是---"+name+"简介是----"+notes);
                     stringBuilder.append(id);
                     stringBuilder.append("\t");
                     stringBuilder.append(name);
